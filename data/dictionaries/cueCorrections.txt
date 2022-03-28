@@ -1,0 +1,44 @@
+cue,cueCorrection
+te,té
+montevideo,Montevideo
+alegria,alegría
+arboles,árboles
+cedula,cédula
+china,China
+quien,quién
+cristo,Cristo
+cuba,Cuba
+maría,María
+reir,reír
+si,sí
+aun,aún
+súper,super
+uruguay,Uruguay
+genero,género
+maquina,máquina
+jamas,jamás
+no se,no sé
+juan,Juan
+navidad,Navidad
+musica,música
+obscuro,oscuro
+google,Google
+tv,TV
+dia,día
+magnifico,magnífico
+anana,ananá
+netflix,Netflix
+homero,Homero
+inecesario,innecesario
+pobresa,pobreza
+mandon,mandón
+hechar,echar
+articulacion,articulación
+modificaión,modificación
+Jair Bolsonaro,Bolsonaro
+vóley,voleibol
+falso ,falso
+salud  ,salud
+cometa ,cometa
+materia ,materia
+tejido ,tejido
