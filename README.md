@@ -2,14 +2,13 @@
 ![SWOW Logo](https://smallworldofwords.org/img/logos/SWOW_Tag_Wide.png)
 
 
-# SWOWES-RP-2022
+# SWOW-RP
 The [Small World of Words project](https://smallworldofwords.org/project/) (SWOW) project is a scientific project to map word meaning in various languages.
 In contrast to dictionaries, it focusses on the aspects of word meaning that are shared between people without imposing restrictions on what aspects of meaning should be considered.
-The methodology is based on a continued word association task, in which participants see a cue word and are asked to give three associated responses to this cue word.
-The current version includes over 3 million responses obtained from over 62,000 participants, for more than 13,000 cues. 
+The methodology is based on a continued word association task, in which participants see a cue word and are asked to give three associated responses to this cue word.. 
 
 
-In this repository you will find a basic analysis pipeline for the Rioplatense Spanish SWOW project which allows you to import an preprocessing the data as well as compute some basic statistics.
+In this repository you will find a basic analysis pipeline for the Rioplatense Spanish SWOW project which allows you to import an preprocessing the data as well as compute some basic statistics. 
 
 Suggestions are always appreciated, and do not hesitate to get in touch if you any questions.
 
