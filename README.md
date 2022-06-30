@@ -8,7 +8,7 @@ In contrast to dictionaries, it focusses on the aspects of word meaning that are
 The methodology is based on a continued word association task, in which participants see a cue word and are asked to give three associated responses to this cue word.. 
 
 
-In this repository you will find a basic analysis pipeline for the Rioplatense Spanish SWOW project which allows you to import an preprocessing the data as well as compute some basic statistics. 
+In this repository you will find a basic analysis pipeline for the __Rioplatense Spanish__ SWOW project which allows you to import an preprocessing the data as well as compute some basic statistics. 
 
 Suggestions are always appreciated, and do not hesitate to get in touch if you any questions.
 
