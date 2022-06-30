@@ -6,8 +6,8 @@
 library(tidyverse)
 library(here)
 source('settings.R')
-file.participants = paste0('../data/SWOW/raw/participants.',release,'.csv')
-file.responses = paste0('../data/SWOW/raw/responses.',release,'.csv')
+file.participants = paste0('../data/SWOW/raw/participants.',release,'.csv') #replace with participants_raw.csv if you use downloaded data from the project webpage
+file.responses = paste0('../data/SWOW/raw/responses.',release,'.csv') #replace with responses_raw.csv if you use downloaded data from the project webpage
 file.output = paste0('../data/SWOW/raw/SWOW-RP.complete.',release,'.csv')
 
 participants = read.csv(file.participants,
