@@ -1,37 +1,25 @@
 library(htmlTable)
 library(gridExtra)
 
+
+dataFolder='../../paperSwow1/data/'
+swowDataFolder='../data/SWOW/'
+scriptsFolder='./'
+release ='16-10-2021'
+source(paste0(scriptsFolder,"plot_themes/customTheme.r"))
+
+
+
 swowN=1
-colnames(fernandezData)[3]="strength"
-otherStrength=fernandezData
-swowStrength = get(paste0("swowStrength",swowN))
-swowFreqVar = paste0("Freq.R",swowN)
-swowStrengthVar = paste0("R",swowN,".Strength")
-swowStrFreqVar = paste0("R",swowN)
 
+swowResponseStats = read.csv(paste0(swowDataFolder,paste0('output/centrality/responseStats.',release,'.csv')),stringsAsFactors = F)
+load(paste0(dataFolder,"fernandezResponseStats.RData"))
 
-fernandez.swowR1.cue.dist = otherStrength %>%
-  filter(freq>2,cue %in% unique(swowStrength$cue)) %>%
-  full_join(swowStrength %>% filter(!!sym(swowStrFreqVar)>2, cue %in% unique(otherStrength$cue))  ,by=c("cue","response"))  %>% 
-  mutate_at(vars(matches("R1|freq|strength")),tidyr::replace_na,0)%>%
-  #head(1000) %>% 
-  group_by(cue) %>%
-  #    select(cue,response,!!sym(swowStrFreqVar),strength) %>% 
-  #  pivot_longer(cols=c(freq,!!sym(swowStrFreqVar)),names_to = "data") %>% 
-  #spread(response,value,fill = 0) %>% select(-cue,-data)
-  summarize(tanimoto=philentropy::distance(rbind(strength,!!sym(swowStrengthVar)) , method="tanimoto"),
-            cosine=philentropy::distance(rbind(strength,!!sym(swowStrengthVar)) , method="cosine")) #%>% 
-    
-
-fernandez.swowR1.cue.dist %>% ggplot(aes(x=cosine,y=tanimoto)) + geom_point()
-
-
-fernandez.swowR1.cue.dist %>% ggplot(aes(x=cosine)) + geom_histogram()
 
 ## compare frequencies
 
 fernandez.swow.merge = fernandezResponseStats %>% inner_join(swowResponseStats,by="response") %>% 
-  mutate(totalFreq = 10000*totalFreq/max(totalFreq,na.rm = T),Freq.R1 = 10000*Freq.R1 / max(Freq.R1,na.rm = T),dif_log_freq=log10(Freq.R1)-log10(totalFreq))
+  mutate(totalFreq = 10000*totalFreq/sum(totalFreq,na.rm = T),Freq.R1 = 10000*Freq.R1 / sum(Freq.R1,na.rm = T),dif_log_freq=log10(Freq.R1)-log10(totalFreq))
 fernandez.swow.merge$dif_log_freq
 
 

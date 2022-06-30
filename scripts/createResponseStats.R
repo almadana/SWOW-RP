@@ -3,12 +3,12 @@
 # Obtain number of types, tokens and Hapax legoma and write to an output file.
 #
 # Author: Simon De Deyne simon2d@gmail.com
-# Date: 18 October 2021
+# Date: 26 April 2022
 library(tidyverse)
 source('settings.R')
 source('../functions/importDataFunctions.R')
 
-file.swow     = '../data/SWOW/processed/SWOW-RP.R70.16-10-2021.csv'
+file.swow     = paste0('../data/SWOW/processed/SWOW-RP.R70.',release,'.csv')
 file.output   = paste0('../data/SWOW/output/centrality/responseStats.',release,'.csv')
 file.stats = paste0("../data/SWOW/output/centrality/responseStatsReport.",release,'.csv')
 

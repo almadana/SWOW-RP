@@ -5,6 +5,7 @@
 # Last modified 18 October 2021
 
 library(tidyverse)
+library(hunspell)
 source('./settings.R')
 source('../functions/preprocessing.R')
 
@@ -32,8 +33,8 @@ PP = X %>% group_by(participantID,nativeLanguage,gender,age,education) %>%
             summarise(N = n()*3,
                 unknown = sum(is.na(R1)*3),
                 missingR2 = sum(is.na(R2) & !is.na(R1)),
-                missingR3 = sum(is.na(R2) & !is.na(R1)),.groups = 'drop') %>%
-        mutate(prop.Unknown = unknown / N, prop.X = (missingR2 + missingR3) / N)
+                missingR3 = sum(is.na(R3) & !is.na(R2)),.groups = 'drop') %>%
+        mutate(prop.Unknown = unknown / N, prop.X = (2*missingR2 + missingR3) / N)
 
 
 ## Add Distinct items
@@ -44,7 +45,7 @@ PP = left_join(PP,result$X %>%
 
 ## Count repeated responses: Total number non-missing minus unique responses
 PP = PP %>% mutate(prop.Repeat = 
-                     ((N - unknown - missingR2 - missingR3)- nTypes)/N)
+                     ((N - unknown - 2*missingR2 - missingR3)- nTypes)/N)
 
 ## Responses in lexicon
 # Calculate presence of response in wordlist # OR # Hunspell dictionary
@@ -99,7 +100,16 @@ X           = X %>% filter(participantID %in%
 
 X %>% group_by(cue) %>% tally() %>% filter(n >= 70) %>% nrow()
 
- 
+badPP = PP %>% filter(!status=='Valid')
+write.csv(badPP,paste0('../data/SWOW/processed/filteredParticipants.',release,'.csv'),
+          row.names = F)
+
+# Too many non-native participants!
+X.nonnative = inner_join(result$X,PP %>% filter(status == 'Non-native') %>% select(participantID), by = 'participantID')
+write.csv(X.nonnative,paste0('../data/SWOW/processed/nonnativeData.',release,'.csv'),
+          row.names = F)
+
+
 # Select 70 responses per row, by considering first: 
 # native Uruguayan-Argentinian Rioplatense, then Argentinian other
 # next by considering the date (most recent first), but always ordered by 
@@ -107,8 +117,9 @@ X %>% group_by(cue) %>% tally() %>% filter(n >= 70) %>% nrow()
 # where possible
 
 # Add a selection variable to favor native speakers
-X = X %>% mutate(native = ifelse(nativeLanguage %in% c('URU_R',"ARG_R"), 2,
-                      ifelse(nativeLanguage %in% c('ARG_N','ARG_C'),1,0))) %>%
+X = X %>% mutate(native = ifelse(nativeLanguage %in% c('URU_R',"ARG_R"), 100,
+                      ifelse(nativeLanguage %in% c('ARG_N','ARG_C'),1,0)),
+                 maleOtherGender = ifelse(gender %in% c("X","Ma"),3,1)) %>%
                       arrange(participantID)
 
 # (Add a selection variable to favor more male speakers)
@@ -117,6 +128,10 @@ X = X %>% mutate(sampleKey = native + participantID)
 # This needs to be checked
 X = X %>% mutate(cue = as.factor(cue))
 X = X %>% group_by(cue) %>% slice_sample(n = 70,weight_by = native+1)
+
+X %>% group_by(cue) %>% tally() %>% filter(n < 70) %>% nrow()
+X %>% group_by(cue) %>% tally() %>% filter(n < 70) %>% nrow()
+
 
 # Write the dataset with 70 responses per cue
 write.csv(X,file.output,row.names = F)

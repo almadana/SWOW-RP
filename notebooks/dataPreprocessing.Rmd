@@ -1,7 +1,6 @@
 ---
 title: "SWOW-RP Descriptives"
 output: html_notebook
-
 ---
 
 
@@ -47,6 +46,7 @@ age = PP %>% summarise(m = round(mean(age,na.rm = T),1),
                        maxAge = round(max(age),1))
 
 pct.Removed = round(100 - PP %>% filter(status=='Valid') %>% nrow() / PP %>% nrow() *100,1)
+table(PP$status)
 
 ```
 There were `r nPP` 
@@ -87,7 +87,7 @@ Figure 2 shows the breakdown interaction between age, gender and education.
 
 ## Cues
 ```{r echo=FALSE}
-file.cues = paste0('../data/SWOW/output/centrality/cueStats.SWOW-RP.R123.16-10-2021.csv')
+file.cues = paste0('../data/SWOW/output/centrality/cueStats.SWOW-RP.R123.',release,'.csv')
 X.cues = read_csv(file.cues) %>% as_tibble()
 
 cues.stats = X.cues %>% summarise(min.n = min(N),max.n = max(N),
@@ -108,6 +108,16 @@ The dataset consists of `r X.cues %>% nrow()` cue words and included `r nProper`
 proper nouns.
 
 ## Responses
+
+```{r}
+file.swow = paste0('../data/SWOW/processed/SWOW-RP.spellchecked.',
+                            release,'.csv')
+X = read.csv(file.swow, stringsAsFactors = FALSE,encoding = 'UTF-8') %>% 
+  as_tibble()
+nResponses = nrow(X)
+```
+
+
 ### Missing and unknown responses
 On average, `r round(cues.stats$m.unknown,1)` % of the cue trials were judged unknown (min = 
 `r cues.stats$min.unknown`%, max = `r cues.stats$max.unknown`%). The 10 most unknown words
@@ -133,7 +143,7 @@ Central responses are responses that are given for either for a large number of 
 are given frequently across all cues (token frequency).
 
 ```{r echo = FALSE}
-file.responses = '../data/SWOW/output/centrality/responseStats.16-10-2021.csv'
+file.responses = paste0('../data/SWOW/output/centrality/responseStats.',release,'.csv')
 X.responses = read.csv(file.responses) %>% as_tibble()
 top_tokens = X.responses %>% arrange(-Types.R123) %>% head(10) %>% pull(response)
 top_types = X.responses %>% arrange(-Freq.R123) %>% head(10) %>% pull(response)
@@ -141,3 +151,14 @@ top_types = X.responses %>% arrange(-Freq.R123) %>% head(10) %>% pull(response)
 <!-- Note: low frequency responses contain commas! -->
 As before, all results are based on R123 responses. The top 10 most common response *types*
 were {*`r paste(top_types)`*}. These were highly similar to the most common responses *tokens*: {*`r paste(top_tokens)`*}.
+
+
+```{r}
+file.swow     = paste0('../data/SWOW/processed/SWOW-RP.R70.',release,'.csv')
+source('../functions/importDataFunctions.R')
+response            = 'R1'
+X.swow              = importDataSWOW(file.swow,response) %>% as_tibble()
+under_70=X.swow %>% group_by(cue) %>% tally() %>% filter(n<70) 
+
+```
+Of the `r X.cues %>% nrow()` cues, `r nrow(under_70)` have less than 70 responses in R1, but at least `r min(under_70$n)`

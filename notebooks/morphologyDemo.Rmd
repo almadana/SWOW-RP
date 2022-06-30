@@ -1,0 +1,137 @@
+---
+title: "Morphology Kernel"
+output: html_notebook
+---
+
+```{r echo=FALSE,warning=FALSE}
+library(tidyverse)
+library(ggraph)
+library(comato)
+library(tidygraph)
+library(viridis)
+source('../scripts/settings.R')
+source('../functions/importDataFunctions.R')
+source('../functions/networkFunctions.R')
+source('../functions/networkVisualization.R')
+source('../functions/similarityFunctions.R')
+
+```
+Illustrate word form normalization on the basis of Gender
+
+```{r echo=FALSE,warning = FALSE}
+response = 'R123'
+file.swow  = paste0('../data/SWOW/processed/SWOW-RP.R70.',release,'.csv')
+X.swow = countResponses(importDataSWOW(file.swow,response))
+G.R123 = importGraph(X.swow)
+#X.swow %>% filter(cue %in% c('roja','rojo'),Freq>1,complete.cases(response)
+G.strength = igraph::as_adjacency_matrix(G.R123,attr='weight',names = TRUE)
+```
+
+```{r echo=FALSE}
+targetWord = 'linda'
+# G.roja = igraph::make_ego_graph(G.R123, order = 1, nodes = targetWord, mode = "all", mindist = 0)[[1]]
+# 
+# # Add clusters or communities
+# G.roja = addCommunity(as_tbl_graph(G.roja),1)
+# 
+# # Here we use the ggraph package which offers more layout options
+# fig.com = ggraph(G.roja,layout = "drl")+
+#   geom_edge_link0(aes(edge_width = weight),edge_colour = "grey66",alpha = 0.3)+
+#   geom_node_point(aes(fill = community,color = community), alpha = 0.8, stroke = 0, size = 1) +
+#   scale_fill_viridis_d(option = 'A') +
+#   scale_edge_width(range = c(0.1,0.9)) + 
+#   theme_graph() +
+#   coord_fixed() + 
+#   theme(legend.position = "none")
+# 
+# print(fig.com)
+```
+
+```{r echo=FALSE}
+targetWord = 'linda'
+G.fem = extractEgoGraph((G.R123),v = targetWord,1,mode='out')
+G.fem = G.fem %>% activate(edges) %>% filter(weight > 9)
+fig.fem = plotEgoGraph(G.fem,PF = FALSE,layoutAlg = 'nicely')
+
+targetWord = 'lindo'
+G.masc = extractEgoGraph((G.R123),v = targetWord,1,mode='out')
+G.masc = G.masc %>% activate(edges) %>% filter(weight > 9)
+fig.masc = plotEgoGraph(G.masc,PF = FALSE,layoutAlg = 'nicely')
+
+ggarrange(fig.fem,fig.masc)
+
+
+```
+
+```{r echo=FALSE}
+fig.circle  = plotCirclepack(G.ego,maxHeight = 30)
+fig.circle
+```
+
+## Adjacency matrices
+```{r echo=FALSE}
+#https://matthewlincoln.net/2014/12/20/adjacency-matrix-plots-with-r-and-ggplot2.html
+
+A = igraph::as_adjacency_matrix(G.masc)
+
+nodes = G.masc %>% activate(nodes) %>% as_tibble()
+nodes$id = as.integer(rownames(nodes))
+
+edges = G.masc %>% activate(edges) %>% as_tibble()
+edges =left_join(edges,nodes,by = c('from'='id')) %>% rename(from_name = name)
+ 
+edges =left_join(edges,nodes,by = c('to'='id')) %>% rename(to_name = name)
+
+
+plot_data <- G.masc %>% activate(edges) %>% mutate(
+        to = factor(to, levels = nodes$name),
+        from = factor(from, levels = nodes$name))
+
+
+# Create the adjacency matrix plot
+fig.adj = ggplot(edges, aes(x = from_name, y = to_name)) +
+      geom_tile(aes(alpha = weight)) +
+      theme_bw() +
+      # Because we need the x and y axis to display every node,
+      # not just the nodes that have connections to each other,
+      # make sure that ggplot does not drop unused factor levels
+      scale_alpha(range = c(0.1,0.9)) +
+      scale_x_discrete(drop = FALSE) +
+      scale_y_discrete(drop = FALSE) +
+      theme(
+        # Rotate the x-axis lables so they are legible
+        axis.text.x = element_text(angle = 270, hjust = 0),
+        # Force the plot into a square aspect ratio
+        aspect.ratio = 1,
+        # Hide the legend (optional)
+        legend.position = "none")
+fig.adj
+```
+
+Load SPALEX
+https://michaelgastner.com/DAVisR2021/chap-tidygraph.html
+```{r }
+X.espal = read.csv('../data/ESPAL/espal_cuelist.csv',stringsAsFactors = F,
+                 strip.white = T) %>% as_tibble()
+targetsMasc = G.masc %>% activate(nodes) %>% pull(name)
+targetsFem = G.fem %>% activate(nodes) %>% pull(name)
+targets = unique(c(targetsMasc,targetsFem))
+X.targets = X.espal %>% filter(word %in% targets) %>% 
+  select(from= word,to = max_lem_lemma) %>% unique()
+X.targets = left_join(X.targets,X.targets %>% group_by(to) %>% 
+            tally() %>% mutate(weight = 1/n) %>% 
+            select(-n),by = 'to') %>% mutate(type='lemma')
+G.targets = tidygraph::as_tbl_graph(X.targets,directed=TRUE)
+
+#edges = edges %>% select(from = from_name,to = to_name,weight) %>% mutate(type = 'semantic')
+```
+
+```{r }
+fig.targets =  ggraph(G.targets, layout = "graphopt") + 
+  geom_node_point() +
+  geom_edge_link(aes(width = weight), alpha = 0.8) + 
+  scale_edge_width(range = c(0.2, 2)) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme_graph()
+
+```

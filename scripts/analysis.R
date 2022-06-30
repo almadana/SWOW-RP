@@ -8,11 +8,11 @@
 # Create complete data table from responses.csv and participants.csv
 source('importRawData.R')
 
-# Spelling Check - create word lists to manually verify - spell-check
-source('createSpellingLists.R')
-
 # Compile a Spanish word list to use for participant language checks
 source('createWordlist.R')
+
+# Spelling Check - create word lists to manually verify - spell-check
+source('createSpellingLists.R')
 
 # Preprocess the data
 source('preprocessData.R')
@@ -47,3 +47,10 @@ source('plotCoverage.R')
 # Compute random walk similarity matrix
 #source('./R/graphRandomWalk.R')
 
+#-- Similarity correlations ----
+
+# Compute Graph Embeddings
+#source("createGraphEmbedding2.R")
+
+# Update similarity judgments in experimental datasets
+#source("similarity_update_2.R")

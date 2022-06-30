@@ -57,16 +57,17 @@ X.corrections =  read.csv(file.corrections,
 
 # Confirm that spelling corrections are consistent with X.lexicon
 nLexicon = X.lexicon %>% nrow()
-X.lexicon = X.lexicon %>% filter(!Word %in% X.corrections$response)
-if(nLexicon != X.lexicon %>% nrow()){
+X.lexicon.after = X.lexicon %>% filter(!(Word %in% X.corrections$response))
+if(nLexicon != X.lexicon.after %>% nrow()){
   warning('Lexicon is not consistent with response corrections. Please remove misspelled words from lexicon')
+  X.inconsistent = anti_join(X.lexicon,X.lexicon.after,by="Word")
 }
 
 X = left_join(X,X.corrections,by='response')
 X = X %>% mutate(response_clean = 
-                   ifelse(is.na(substitution),
-                          response_clean,substitution)) 
-X = X %>% select(-substitution)
+                   ifelse(is.na(correction),
+                          response_clean,correction)) 
+X = X %>% select(-correction)
 
 #X = X %>% mutate(response_clean = ifelse(response_clean))
 X = X %>% mutate(inLexicon = ifelse(response_clean %in% X.lexicon$Word,1,0))

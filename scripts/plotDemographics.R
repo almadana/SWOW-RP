@@ -56,7 +56,7 @@ fig.demo =  ggplot(X.demo,aes(x=age,y=n,fill=interaction(Education,gender,sep="-
   #scale_fill_brewer(name = 'Education & Gender',palette = 'RdYlGn',direction = -1) +
   scale_fill_manual(name =  'Education & Gender',values  = mypal) +
   new_scale_fill()+
-  scale_fill_manual(name =  'Females',values  = mypal[1:5],labels = educ.gend.levels) +
+  scale_fill_manual(name =  'Females',values  = mypal[1:5],labels = educ.gend.levels[1:5]) +
   theme_minimal() +
   theme(text=element_text(size = 10))
 fig.demo

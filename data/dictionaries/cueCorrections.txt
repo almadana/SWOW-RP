@@ -42,3 +42,32 @@ salud  ,salud
 cometa ,cometa
 materia ,materia
 tejido ,tejido
+youtube,Youtube
+aborigenes,aborígenes
+arco iris,arcoíris
+arcoiris,arcoíris
+autentico,auténtico
+balcon,balcón
+chelo,cello
+conciencia,consciencia
+delicuente,delincuente
+deshechar,desechar
+enfermedas,enfermedad
+enfernedad,enfermedad
+et,ET
+famila,familia
+frivolo,frívolo
+heroes,héroes
+inflamacion,inflamación
+mandamas,mandamás
+microfono,micrófono
+nasa,NASA
+ong,ONG
+ordenes,órdenes
+pedro,Pedro
+rapidos,rápidos
+restaurant,restaurante
+sobervio,soberbio
+termino,término
+tios,tíos
+enriedo,enredo

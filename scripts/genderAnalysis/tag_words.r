@@ -5,12 +5,12 @@ library(tidyverse)
 library(udpipe)
 
 
-source('scripts/settings.R')
-source('functions/importDataFunctions.R')
+source('./settings.R')
+source('../functions/importDataFunctions.R')
 
-tagged.lexicon.file = paste0('data/SWOW/processed/SWOW-RP-tagged-lexicon-',release,'.csv')
-lexicon.pairs.file = paste0('data/SWOW/processed/SWOW-RP-lexicon-pairs-',release,'.csv')
-lexicon.number.pairs.file = paste0('data/SWOW/processed/SWOW-RP-lexicon-number-pairs-',release,'.csv')
+tagged.lexicon.file = paste0('../data/SWOW/processed/SWOW-RP-tagged-lexicon-',release,'.csv')
+lexicon.pairs.file = paste0('../data/SWOW/processed/SWOW-RP-lexicon-pairs-',release,'.csv')
+lexicon.number.pairs.file = paste0('../data/SWOW/processed/SWOW-RP-lexicon-number-pairs-',release,'.csv')
 
 
 getGender <- function(words) {
@@ -32,15 +32,15 @@ getNumber <- function(words) {
 }
 
 # gender with udpipe
-ancora_model_file = "./data/NLP/spanish-ancora-ud-2.4-190531.udpipe"
+ancora_model_file = "../data/NLP/spanish-ancora-ud-2.4-190531.udpipe"
 ancora_model = udpipe_load_model(ancora_model_file)
 
-file.swow = paste0('./data/SWOW/processed/SWOW-RP.R70.',release,'.csv')
+file.swow = paste0('../data/SWOW/processed/SWOW-RP.R70.',release,'.csv')
 X.R123 = importDataSWOW(file.swow,'R123')
 
 #POS with EsPal
 #source('./scripts/genderAnalysis/export_lexicon_to_ESPAL.r') #only run if dataset has changed // need to manually use EsPal with output files from this script to be effectiva (and replace data files obtained from the EsPal page)
-source('./scripts/genderAnalysis/load_ESPAL_data.r') #TO-DO
+source('./genderAnalysis/load_ESPAL_data.r') #TO-DO
 
 X.freq = X.R123 %>% group_by(cue,response) %>% tally() 
 X.lexicon = data.frame(word = unique(c(X.freq$cue,X.freq$response))) %>% 

@@ -39,7 +39,7 @@ katzWalk = function(G,alpha){
 }
 
 # Convert to normalized katz Index graph ("random walk")
-katzIndex = function(G,alpha){
+katzIndex = function(P,alpha){
   #P = igraph::as_adjacency_matrix(G,attr='weight',names = TRUE)
   I = diag(1, dim(P)[1]);
   K = solve(I - alpha*P);

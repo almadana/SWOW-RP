@@ -52,11 +52,11 @@ normalizeMissingResponses = function(X,missing.Token){
  
   nInconsistent       = sum(inconsistent)
   
-  # Swap inconsistent missing responses coded in R2 but not present in R3
-  inconsistent  = ( (X$R2  %in% missing.Token)) & (! (X$R3 %in% missing.Token))
+  # Swap inconsistent missing responses coded in R1 but not present in R2
+  inconsistent  = ( (X$R1  %in% missing.Token)) & (! (X$R2 %in% missing.Token))
   nInconsistent       = nInconsistent + sum(inconsistent)
-  X$R2[inconsistent]  = X$R3[inconsistent]
-  X$R3[inconsistent]  = missing.Token[1]
+  X$R1[inconsistent]  = X$R2[inconsistent]
+  X$R2[inconsistent]  = missing.Token[1]
   
   # Recode all unknown and missing responses as NA
   X = X %>% mutate(R1 = ifelse(R1 %in% c(missing.Token,unknown.Token),NA,R1),

@@ -1,0 +1,49 @@
+---
+title: "Gender Stats"
+output: html_notebook
+---
+
+```{r echo=F}
+X.lex.pos = read.csv(tagged.lexicon.file)
+cues = X.R123 %>% distinct(cue) %>% pull(cue)
+```
+
+
+Basic gender, number and POS tags. Run tag_words.r before this script.
+
+Number of cues: `r length(cues)`
+
+
+Percentage of fem cues: 
+
+Percentage of fem responses: `r scales::percent(nrow(X.lex.pos %>% filter(gender == "Fem")) / nrow(X.lex.pos) )` 
+
+Percentage of fem cues: `r scales::percent(nrow(X.lex.pos %>% filter(gender == "Fem",word %in% cues)) / nrow(X.lex.pos %>% filter(word %in% cues)) )` 
+
+
+
+Percentage of types with gender and number marking: `r scales::percent(nrow(X.lex.pos) / nrow(X.lexicon) )` 
+
+Percentage of cues with gender and number marking: `r scales::percent(nrow(X.lex.pos %>% filter(word %in% cues)) / length(cues))` 
+
+Percentage of types with gender, number and POS marking: `r scales::percent(nrow(X.lex.pos %>% filter(!is.na(POS))) / nrow(X.lexicon))`
+
+```{r echo=F}
+X.freq = X.freq %>% group_by(response) %>% summarize(R123 = sum(n))
+X.lex.pos = X.lex.pos %>%  inner_join(X.freq,by=c("word"="response"))
+X.lexicon = X.lexicon %>%  inner_join(X.freq,by=c("word"="response"))
+
+```
+
+
+Percentage of tokens with gender and number marking: `r scales::percent(sum(X.lex.pos$R123) / sum(X.lexicon$R123))`
+
+Percentage of Fem tokens: `r scales::percent( sum( X.lex.pos %>% filter(gender == "Fem") %>% pull(R123) ) / sum(X.lex.pos$R123))`
+
+
+
+Percentage of tokens with gender, number and POS marking.
+`r scales::percent(sum(X.lex.pos %>% filter(!is.na(POS)) %>% pull(R123)) / sum(X.lexicon%>% pull(R123))) `
+
+
+
