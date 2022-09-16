@@ -3,3 +3,6 @@
 data/SWOW/*
 sync.sh
 .Rproj.user
+*Rproj
+scripts/export_public_raw_data.r
+README.html
