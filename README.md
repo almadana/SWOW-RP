@@ -4,7 +4,7 @@
 
 # SWOW-RP
 The [Small World of Words project](https://smallworldofwords.org/project/) (SWOW) project is a scientific project to map word meaning in various languages.
-In contrast to dictionaries, it focusses on the aspects of word meaning that are shared between people without imposing restrictions on what aspects of meaning should be considered.
+In contrast to dictionaries, it focuses on the aspects of word meaning that are shared between people without imposing restrictions on what aspects of meaning should be considered.
 The methodology is based on a continued word association task, in which participants see a cue word and are asked to give three associated responses to this cue word.. 
 
 
@@ -15,7 +15,7 @@ Suggestions are always appreciated, and do not hesitate to get in touch if you a
 
 ## Obtaining the data
 In addition to the scripts, you will need to retrieve the word association data.
-Currently word association and participant data is available for over 13000 cues. The data consists of over 3M  reponses collected between 2014 and 2022. They are currently submitted for publication. Note that the final version is subject to change.
+Currently word association and participant data is available for over 13000 cues. The data consists of over 3M  responses collected between 2014 and 2022. They are currently submitted for publication. Note that the final version is subject to change.
 If you want to use these data for your own research, you can obtain them from the Small World of Words [research page](https://smallworldofwords.org/project/research/). 
 
 Please note that data themselves are licensed under [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US).
@@ -87,11 +87,11 @@ Use [createCueStats.R](https://github.com/almadana/SWOW-RP/blob/master/scripts/c
 A histogram of the response coverage for R1 and R123 graphs can be obtained from the script [plotCoverage.R](https://github.com/almadana/SWOWES-UY-2018/blob/master/R/plotCoverage.R). Vocabulary growth curves can be obtained with [plotVocabularyGrowth.R](https://github.com/almadana/SWOW-RP/blob/master/scripts/plotVocabularyGrowth.R).
 
 ### R1 - R2 response chaining
-Later responses can be affected by the previous response a participant gave. In general, this is quite rare, but for some cues this effect can be more pronounced. To investigate response chaining, we compare the conditional probabilities of the second response when preceeded with a mediated R1 response with conditional probabilities when R2 is not preceeded by this mediator. 
+Later responses can be affected by the previous response a participant gave. In general, this is quite rare, but for some cues this effect can be more pronounced. To investigate response chaining, we compare the conditional probabilities of the second response when preceded with a mediated R1 response with conditional probabilities when R2 is not preceded by this mediator. 
 An example of this analysis is available in [calculateR12ResponseChaining.R](https://github.com/almadana/SWOW-RP/blob/master/scripts/calculateR12ResponseChaining.R).
 
 ## Spelling and lexica
-We tried to check the spelling of the most common responses (those occurring at least two times in the data), but it's quite likely that some corrections can be improved and some misspellings are missed. This is where git can make our lives a bit easier. If you find errors, please check the correction file and submit a pull request with additional or ammended corrections.
+We tried to check the spelling of the most common responses (those occurring at least two times in the data), but it's quite likely that some corrections can be improved and some misspellings are missed. This is where git can make our lives a bit easier. If you find errors, please check the correction file and submit a pull request with additional or amended corrections.
 
 Many files are of importance at this step, please look at the [data/dictionaries](https://github.com/almadana/SWOW-RP/blob/master/data/dictionaries/) folder. Among these:
 * [rioplatenseProperNames.txt](https://github.com/almadana/SWOW-RP/blob/master/data/dictionaries/rioplatenseProperNames.txt): List of proper names that should not be corrected when found as response

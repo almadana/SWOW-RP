@@ -9,9 +9,12 @@
 # TODO: multiword expressions not in the list of exceptions are currently not
 # spell-checked
 #
+# SDD: Bug-fixed for concatenated resposnes 15/09/2022
+# SDD: Note this required change of order of the first preprocessing steps
+#
 # Author: Simon De Deyne, simon2d@gmail.com
 # Adaptation for RP data: Álvaro Cabana, almadana@gmail.com
-# Last changed: 17/10/2021
+# Last changed: 15/09/2022
 
 
 require(stringi)
@@ -27,22 +30,22 @@ stats = c()
 
 # Read data
 file.data = paste0('../data/SWOW/raw/SWOW-RP.complete.',release,'.csv')
-X = read.csv(file.data, stringsAsFactors = FALSE,encoding = 'UTF-8') %>% 
-      as_tibble()
-
-# Fix repeated responses
-# e.g. cue: 'sea', R1 = 'swim',R2 = 'swim'
-# replaces R2 as NA
-result = recodeRepeats(X,missing.Token,unknown.Token)
-stats = c(stats,'repeatedResponses' = result$nDoubles)
+X = readr::read_csv(file.data, show_col_types = F)
 
 # Replace inconsistent missing responses and code as NA
-result = normalizeMissingResponses(result$X,missing.Token)
+result = normalizeMissingResponses(X,missing.Token)
 stats = c(stats,'inconsistentMissing' = result$nInconsistent)
 
 # Replace R1 multiword responses and discard R2 and R3
 result = parseConcatenatedResponses(result$X,missing.Token,unknown.Token)
 stats = c(stats,'multiWordMissing' = result$nMultiResponsesChanged)
+
+# Fix repeated responses
+# e.g. cue: 'sea', R1 = 'swim',R2 = 'swim'
+# replaces R2 as NA
+result = recodeRepeats(result$X,missing.Token,unknown.Token)
+stats = c(stats,'repeatedResponses' = result$nDoubles)
+
 
 # Manually check any remaining responses that might indicate concatenated R1/2/3
 X.multi = result$X%>% filter(grepl('.*\\W.*\\W.*',R1)) %>% 
