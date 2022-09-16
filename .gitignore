@@ -2,3 +2,4 @@
 *.RData
 data/SWOW/*
 sync.sh
+.Rproj.user
